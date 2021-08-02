@@ -12,9 +12,35 @@ public class BuildingGhost : MonoBehaviour
         spriteGameObject = transform.Find("sprite").gameObject;
     }
 
-    private void Show()
+    private void Start()
+    {
+        BuildingManager.Instance.OnActiveBuildingTypeChange += BuildingManager_onActiveBuildingTypeChanged;
+    }
+
+    private void BuildingManager_onActiveBuildingTypeChanged(object sender,
+     BuildingManager.OnActiveBuildingTypeChangeEventArgs e)
+    {
+        // BuildingTypeSO buildingType = BuildingManager.Instance.GetActiveBuildingType();
+        if (e.activeBuildingType == null)
+        {
+            Hide();
+        }
+        else
+        {
+            Show(e.activeBuildingType.sprite);
+        }
+
+    }
+
+    private void Update()
+    {
+        transform.position = UtilsClass.GetMouseWorldPosition();
+    }
+
+    private void Show(Sprite ghostSprite)
     {
         spriteGameObject.SetActive(true);
+        spriteGameObject.GetComponent<SpriteRenderer>().sprite = ghostSprite;
     }
 
     private void Hide()
